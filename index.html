@@ -168,8 +168,11 @@
   }
   dialog h2 { font-family: var(--serif); margin: 0 0 .9rem; font-size: 1.6rem; color: #fff; }
   #modal-corps p { white-space: pre-line; line-height: 1.6; margin: .4rem 0 1rem; font-size: 1.05rem; }
-  #modal-corps img, #modal-corps iframe {
+  #modal-corps img, #modal-corps iframe, #modal-corps video {
     display: block; width: 100%; border: 0; border-radius: 10px; margin: 0 0 .9rem;
+  }
+  #modal-corps img, #modal-corps video {
+    max-height: 70vh; object-fit: contain; background: rgba(0,0,0,.25);
   }
   #modal-corps iframe { aspect-ratio: 16 / 9; }
   #modal-corps a.lien {
@@ -240,6 +243,8 @@ const CONFIG = {
      image : adresse d'une image (https://...)  — optionnel
      alt   : description de l'image               — optionnel
      video : identifiant YouTube, ex. "dQw4w9WgXcQ" — optionnel
+     fichierVideo : chemin d'un fichier .mp4 du dépôt, ex. "videos/jour12.mp4" — optionnel
+     affiche : image affichée avant la lecture de la vidéo, ex. "images/jour12.jpg" — optionnel
      lien  : { url: "https://...", texte: "Voir" }  — optionnel
    Exemple complet :
      { titre: "Ma chanson", texte: "Écoute ça !",
@@ -429,6 +434,15 @@ const JOURS = [
       f.allowFullscreen = true;
       f.loading = "lazy";
       corps.appendChild(f);
+    }
+    if (d.fichierVideo) {
+      var v = document.createElement("video");
+      v.src = d.fichierVideo;
+      v.controls = true;
+      v.playsInline = true;
+      v.preload = "metadata";
+      if (d.affiche) v.poster = d.affiche;
+      corps.appendChild(v);
     }
     if (d.texte) {
       var para = document.createElement("p");
